@@ -13,17 +13,19 @@ type MangaViewerProps = {
 }
 
 
-export default function MangaViewer({width, height, urls, direction='rtl', start_1side=true, noLoading=false}: MangaViewerProps) {
+export default function MangaViewer(props: MangaViewerProps) {
+    const {width, height, urls, direction='rtl', start_1side=false, noLoading=false} = props;
     const [currIdx, setCurrIdx] = useState(0);
     // const [isForward, setForward] = useState(true);
     const [isLoaded, setLoaded] = useState(noLoading);
 
+    const prevProps = useRef<MangaViewerProps>();
     const loadedList = useRef<string[]>([]);
     const imgMap = useRef<Map<string, HTMLImageElement>>(new Map());
 
 
-    const navigate = (direction: 'left'|'right') => {
-        if (direction === 'right') {
+    const navigate = (to: 'left'|'right') => {
+        if ((to==='right') === (direction==='rtl')) {
             if (currIdx > 0) {
                 // setForward(false);
                 setCurrIdx(currIdx-2);
@@ -52,13 +54,15 @@ export default function MangaViewer({width, height, urls, direction='rtl', start
             setLoaded(loaded);
     }
 
-    const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    const handleLeftOverlay = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.button !== 0) return;
         if (!isLoaded) return;
-        if (e.clientX > width*2/3)
-            navigate('right');
-        else if (e.clientX < width/3)
-            navigate('left');
+        navigate('left');
+    }
+    const handleRightOverlay = (e: React.MouseEvent<HTMLDivElement>) => {
+        if (e.button !== 0) return;
+        if (!isLoaded) return;
+        navigate('right');
     }
 
     const updateImgSize = (img: HTMLImageElement)=>{
@@ -88,45 +92,63 @@ export default function MangaViewer({width, height, urls, direction='rtl', start
     }, [])
 
 
+    useEffect(()=>{
+        prevProps.current = props;
+    }, [props])
+
+
+    let forceNoTransition = !prevProps.current || prevProps.current.direction!==direction || prevProps.current.start_1side!==start_1side;
+
+
     return (
         <div className='container'
             style={{
                 width: `${width}px`,
                 height: `${height}px`,
             }}
-            onMouseDown={handleMouseDown}
         >
 
             {/* 捲り式 Viewer */}
             {urls.map((url, i)=>{
+                if (start_1side) {
+                    i += 1;
+                }
+                // which side should page i be positioned if being read
+                const side = (direction==='rtl')===(i%2===0)? 'right':'left';
+
                 const zIdx = 10000-200*Math.abs(i*2-currIdx*2-1);  // this must be integer, so scale it up for transition.
 
                 // let z = -2*Math.abs(i*2-currPage*2-1);  // this means, e.g. page 1 and 2 has different z
                 let z = -2*Math.abs((i<=currIdx?0:2) + currIdx - Math.ceil(i/2)*2);  // this means, e.g. page 1 and 2 has the same z
 
+                // pages below will shift to outside
                 let x = (i<=currIdx?0:2) + currIdx - Math.ceil(i/2)*2;  // this means, e.g. page 1 and 2 has the same x
                 if (x >= 2) x-= 2;
                 if (x <= -2) x+= 2;
                 x *= 3;
+                if (direction==='ltr') x = -x;
 
-                const rotY = i%2===0? (i<=currIdx? 0: -180): (i<=currIdx? 180: 0);
+                // which side page i is now positioned
+                const pos = (i<=currIdx) === (direction==='rtl')? 'right': 'left';
+                const rotY = side===pos? 0: (side==='right'? -180: 180);
 
                 return (
                     <div
                         className='comic-page'
                         key={url}
                         style={{
-                            left: i%2===0? '50%': '10%',
+                            left: side==='left'? '10%': '50%',
                             zIndex: `${zIdx}`,
-                            transformOrigin: i%2===0? 'left': 'right',
+                            transformOrigin: side==='left'? 'right': 'left',
                             transform: `translateX(${x}px) translateZ(${z}px) rotateY(${rotY}deg)`,
+                            ...(forceNoTransition?{transitionDuration: '0s'}: {})
                         }}
                     >
                         {url!==''? (
                             <div
                                 className='comic-img-container'
                                 style={{
-                                    ...(i%2===0? {left: 0}: {right: 0}),
+                                    ...(side==='left'? {right: 0}: {left: 0}),
                                 }}
                             >
                                 <img
@@ -147,7 +169,7 @@ export default function MangaViewer({width, height, urls, direction='rtl', start
                                         checkLoaded();
                                     }}
                                 />
-                                <div style={{boxShadow: `inset ${i%2===0? '':'-'}10px 0 10px -10px rgba(0,0,0,0.3)`}}>
+                                <div style={{boxShadow: `inset ${side==='left'? '-':''}10px 0 10px -10px rgba(0,0,0,0.3)`}}>
                                 </div>
                             </div>
                         ): undefined}
@@ -155,8 +177,12 @@ export default function MangaViewer({width, height, urls, direction='rtl', start
                 )
             })}
 
+            {/* Clickable Overlay */}
+            <div className='left-overlay' onMouseDown={handleLeftOverlay}/>
+            <div className='right-overlay' onMouseDown={handleRightOverlay}/>
+
             {/* LOADING overlay */}
-            <div className='loading-div' style={{opacity: `${isLoaded?0:1}`}}>
+            <div className='loading-div' style={{display: `${isLoaded?'none':'block'}`}}>
                 <p>LOADING...</p>
             </div>
 

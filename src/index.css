@@ -2,14 +2,12 @@
     position: relative;
     background-color: #222;
     overflow: hidden;
-    cursor: pointer;
 
     transform-style: preserve-3d;
     perspective: 2000px;
 }
 
 .comic-page {
-    overflow: hidden;
     height: 80%;
     width: 40%;
     top: 10%;
@@ -50,7 +48,6 @@
     background-color: #222;
     color: #ccc;
     font-size: 2em;
-    opacity: 1;
 
     justify-content: center;
     transition: 1s;
@@ -60,4 +57,24 @@
     position: absolute;
     top: calc(50% - 1em);
     left: calc(50% - 3em);
+}
+
+.left-overlay {
+    z-index: 9999;
+    position: absolute;
+    left: 0;
+    width: 33%;
+    top: 0;
+    height: 100%;
+    cursor: url('left-arrow.png'), pointer;
+}
+
+.right-overlay {
+    z-index: 9999;
+    position: absolute;
+    right: 0;
+    width: 33%;
+    top: 0;
+    height: 100%;
+    cursor: url('right-arrow.png'), pointer;
 }
