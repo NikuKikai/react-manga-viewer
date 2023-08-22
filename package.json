@@ -1,0 +1,33 @@
+{
+  "name": "react-manga-viewer",
+  "version": "1.0.5",
+  "main": "./dist/index.js",
+  "author": "nikukikai",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "restricted"
+  },
+  "types": "./src/index.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "build:watch": "tsc -w"
+  },
+  "peerDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.20",
+    "@types/react-dom": "^18.2.7",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "csstype": "^3.1.2",
+    "js-tokens": "^4.0.0",
+    "loose-envify": "^1.4.0",
+    "scheduler": "^0.23.0"
+  },
+  "description": ""
+}
