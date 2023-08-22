@@ -32,7 +32,7 @@ export default function MangaViewer(props: MangaViewerProps) {
             }
         }
         else {
-            if (currIdx < urls.length-2) {
+            if (currIdx < urls.length-2+ (start_1side?1:0)) {
                 // setForward(true);
                 setCurrIdx(currIdx+2);
             }
