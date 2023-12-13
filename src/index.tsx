@@ -92,12 +92,12 @@ export default function MangaViewer(props: MangaViewerProps) {
     }, [])
 
 
+    let forceNoTransition = !prevProps.current || prevProps.current.direction!==props.direction || prevProps.current.start_1side!==props.start_1side;
+
+
     useEffect(()=>{
         prevProps.current = props;
     }, [props])
-
-
-    let forceNoTransition = !prevProps.current || prevProps.current.direction!==direction || prevProps.current.start_1side!==start_1side;
 
 
     return (
