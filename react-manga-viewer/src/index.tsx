@@ -181,7 +181,6 @@ export default function MangaViewer(props: MangaViewerProps) {
         prevProps.current = props;
     }, [props])
 
-    const clampMargin = `clamp(0, ${margin}, 40%)`;
 
     return (
         <div className='container' style={{ width: `${width}px`, height: `${height}px` }}>
@@ -225,10 +224,10 @@ export default function MangaViewer(props: MangaViewerProps) {
                         className='comic-page'
                         key={idx}
                         style={{
-                            left: side === 'left' ? clampMargin : '50%',
-                            top: clampMargin,
-                            width: `calc(50% - ${clampMargin})`,
-                            height: `calc(100% - ${clampMargin} * 2)`,
+                            left: side === 'left' ? margin : '50%',
+                            top: margin,
+                            width: `calc(50% - ${margin})`,
+                            height: `calc(100% - ${margin} * 2)`,
                             zIndex: `${zIdx}`,
                             transformOrigin: side === 'left' ? 'right' : 'left',
                             transform: `translateX(${x}px) translateZ(${z}px) rotateY(${rotY}deg)`,
