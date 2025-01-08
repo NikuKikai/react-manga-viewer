@@ -11,6 +11,7 @@ type MangaViewerProps = {
     start_1side?: boolean,
     noLoading?: boolean,
     divideAspect?: number,
+    margin?: string,
 }
 
 
@@ -23,6 +24,7 @@ export default function MangaViewer(props: MangaViewerProps) {
         start_1side = false,
         noLoading = false,
         divideAspect = 1.41,
+        margin = '10%',
     } = props;
 
     const [currIdx, setCurrIdx] = useState(0);
@@ -179,14 +181,10 @@ export default function MangaViewer(props: MangaViewerProps) {
         prevProps.current = props;
     }, [props])
 
+    const clampMargin = `clamp(0, ${margin}, 40%)`;
 
     return (
-        <div className='container'
-            style={{
-                width: `${width}px`,
-                height: `${height}px`,
-            }}
-        >
+        <div className='container' style={{ width: `${width}px`, height: `${height}px` }}>
             {/* Resolve CORS */}
             <div style={{ position: 'absolute', opacity: 0 }}>
                 {urls.map((url, i) => {
@@ -227,7 +225,10 @@ export default function MangaViewer(props: MangaViewerProps) {
                         className='comic-page'
                         key={idx}
                         style={{
-                            left: side === 'left' ? '10%' : '50%',
+                            left: side === 'left' ? clampMargin : '50%',
+                            top: clampMargin,
+                            width: `calc(50% - ${clampMargin})`,
+                            height: `calc(100% - ${clampMargin} * 2)`,
                             zIndex: `${zIdx}`,
                             transformOrigin: side === 'left' ? 'right' : 'left',
                             transform: `translateX(${x}px) translateZ(${z}px) rotateY(${rotY}deg)`,
@@ -236,9 +237,7 @@ export default function MangaViewer(props: MangaViewerProps) {
                     >
                         <div
                             className='comic-img-container'
-                            style={{
-                                ...(side === 'left' ? { right: 0 } : { left: 0 }),
-                            }}
+                            style={{ ...(side === 'left' ? { right: 0 } : { left: 0 }) }}
                         >
                             <canvas
                                 ref={e => setCanvasRef(e, idx)}
@@ -246,7 +245,9 @@ export default function MangaViewer(props: MangaViewerProps) {
                             />
                             <div
                                 className='comic-img-shadow-div'
-                                style={{ boxShadow: `inset ${side === 'left' ? '-' : ''}10px 0 10px -10px rgba(0,0,0,0.3)` }}>
+                                style={{
+                                    boxShadow: `inset ${side === 'left' ? '-' : ''}10px 0 10px -10px rgba(0,0,0,0.3)`
+                                }}>
                             </div>
                         </div>
                     </div>

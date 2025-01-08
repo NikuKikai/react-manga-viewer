@@ -8,6 +8,7 @@ export declare type MangaViewerProps = {
     start_1side?: boolean,
     noLoading?: boolean,
     divideAspect?: number,
+    margin?: string,
 }
 
 declare function MangaViewer(props: MangaViewerProps): JSX.Element | null;
