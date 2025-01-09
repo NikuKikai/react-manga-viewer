@@ -253,8 +253,9 @@ export default function MangaViewer(props: MangaViewerProps) {
                             className='comic-img-shadow-div'
                             style={{
                                 boxShadow: `inset ${side === 'left' ? '-' : ''}${shadowSize}px 0 ${shadowSize}px -10px rgba(0,0,0,0.3)`,
-                                ...(side === 'left' ? { right: 0 } : { left: 0 }), maskMode: 'alpha', maskType: 'alpha', maskRepeat: 'no-repeat',
-                                maskImage: `url(${url})`, maskSize: '100%, 100%, contain', maskPosition: (side === 'left' ? 'right' : 'left'),
+                                ...(side === 'left' ? { right: 0 } : { left: 0 }),
+                                maskImage: `url(${url})`,
+                                maskPosition: (side === 'left' ? 'right' : 'left'),
                             }}>
                         </div>
                     </div>

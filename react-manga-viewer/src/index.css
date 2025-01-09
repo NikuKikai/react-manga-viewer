@@ -16,6 +16,7 @@
     transition: 2s;
     transition-timing-function: ease-out;
     user-select: none;
+    backface-visibility: hidden;
 }
 
 .comic-img-container {
@@ -38,6 +39,10 @@
     position: absolute;
     width: 100%;
     height: 100%;
+    mask-size: contain;
+    mask-repeat: no-repeat;
+    mask-mode: alpha;
+    mask-type: alpha;
 
     transition: 2s;
     transition-timing-function: ease-in-out;
