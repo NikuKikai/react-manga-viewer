@@ -29,7 +29,8 @@ export default function MangaViewer(props: MangaViewerProps) {
 
     const [currIdx, setCurrIdx] = useState(0);
     const [isLoaded, setLoaded] = useState(noLoading);
-    const [npages, setNpages] = useState<number>(0);
+    // const [npages, setNpages] = useState<number>(0);
+    const npages = urls.length;
 
     const propsRef = useRef<MangaViewerProps>(props);
     const prevProps = useRef<MangaViewerProps>();
@@ -37,71 +38,71 @@ export default function MangaViewer(props: MangaViewerProps) {
     const offcanvases = useRef<HTMLCanvasElement[]>([]);
     const canvasMap = useRef<Map<number, HTMLCanvasElement>>(new Map());
 
-    const imageMap = useRef<Map<number, HTMLImageElement>>(new Map());
-    const imageLoadedMap = useRef<Map<number, boolean>>(new Map());
+    // const imageMap = useRef<Map<number, HTMLImageElement>>(new Map());
+    // const imageLoadedMap = useRef<Map<number, boolean>>(new Map());
 
 
     propsRef.current = props;
 
 
-    const setCanvasRef = (e: HTMLCanvasElement | null, i: number) => {
-        if (e) {
-            canvasMap.current.set(i, e);
-            updateCanvases();
-        }
-        else canvasMap.current.delete(i);
-    };
+    // const setCanvasRef = (e: HTMLCanvasElement | null, i: number) => {
+    //     if (e) {
+    //         canvasMap.current.set(i, e);
+    //         updateCanvases();
+    //     }
+    //     else canvasMap.current.delete(i);
+    // };
 
-    const setImageRef = (e: HTMLImageElement | null, i: number) => {
-        if (e) {
-            imageMap.current.set(i, e);
-            imageLoadedMap.current.set(i, false);
-        }
-        else {
-            imageMap.current.delete(i);
-            imageLoadedMap.current.delete(i);
-        }
-    };
+    // const setImageRef = (e: HTMLImageElement | null, i: number) => {
+    //     if (e) {
+    //         imageMap.current.set(i, e);
+    //         imageLoadedMap.current.set(i, false);
+    //     }
+    //     else {
+    //         imageMap.current.delete(i);
+    //         imageLoadedMap.current.delete(i);
+    //     }
+    // };
 
-    const handleImageLoad = (i: number, url: string) => {
-        imageLoadedMap.current.set(i, true);
+    // const handleImageLoad = (i: number, url: string) => {
+    //     imageLoadedMap.current.set(i, true);
 
-        let loaded = true;
-        for (let v of imageLoadedMap.current.values()) {
-            loaded = loaded && v;
-        }
-        if (loaded) {
-            if (!divideAspect) {
-                for (let imgEle of imageMap.current.values()) {
-                    const cvs = document.createElement('canvas');
-                    const ctx = cvs.getContext('2d');
-                    cvs.width = imgEle.width;
-                    cvs.height = imgEle.height;
-                    ctx?.drawImage(imgEle, 0, 0);
+    //     let loaded = true;
+    //     for (let v of imageLoadedMap.current.values()) {
+    //         loaded = loaded && v;
+    //     }
+    //     if (loaded) {
+    //         if (!divideAspect) {
+    //             for (let imgEle of imageMap.current.values()) {
+    //                 const cvs = document.createElement('canvas');
+    //                 const ctx = cvs.getContext('2d');
+    //                 cvs.width = imgEle.width;
+    //                 cvs.height = imgEle.height;
+    //                 ctx?.drawImage(imgEle, 0, 0);
 
-                    offcanvases.current.push(cvs);
-                }
-            }
-            else {
-                for (let imgEle of imageMap.current.values()) {
-                    const R = imgEle.height / imgEle.width;
-                    const k = Math.round(Math.max(R / divideAspect, 1));
-                    const h = Math.round(imgEle.height / k);
-                    for (let i = 0; i < k; i++) {
-                        const cvs = document.createElement('canvas');
-                        const ctx = cvs.getContext('2d');
-                        cvs.width = imgEle.width;
-                        cvs.height = h;
-                        ctx?.drawImage(imgEle, 0, -i * h);
+    //                 offcanvases.current.push(cvs);
+    //             }
+    //         }
+    //         else {
+    //             for (let imgEle of imageMap.current.values()) {
+    //                 const R = imgEle.height / imgEle.width;
+    //                 const k = Math.round(Math.max(R / divideAspect, 1));
+    //                 const h = Math.round(imgEle.height / k);
+    //                 for (let i = 0; i < k; i++) {
+    //                     const cvs = document.createElement('canvas');
+    //                     const ctx = cvs.getContext('2d');
+    //                     cvs.width = imgEle.width;
+    //                     cvs.height = h;
+    //                     ctx?.drawImage(imgEle, 0, -i * h);
 
-                        offcanvases.current.push(cvs);
-                    }
-                }
-            }
-            setNpages(offcanvases.current.length);
-            setLoaded(true);
-        }
-    };
+    //                     offcanvases.current.push(cvs);
+    //                 }
+    //             }
+    //         }
+    //         setNpages(offcanvases.current.length);
+    //         setLoaded(true);
+    //     }
+    // };
 
 
     const navigate = (to: 'left' | 'right') => {
@@ -185,7 +186,7 @@ export default function MangaViewer(props: MangaViewerProps) {
     return (
         <div className='container' style={{ width: `${width}px`, height: `${height}px` }}>
             {/* Resolve CORS */}
-            <div style={{ position: 'absolute', opacity: 0 }}>
+            {/* <div style={{ position: 'absolute', opacity: 0 }}>
                 {urls.map((url, i) => {
                     return (<img
                         ref={(e) => { setImageRef(e, i) }}
@@ -195,29 +196,37 @@ export default function MangaViewer(props: MangaViewerProps) {
                         onLoad={() => { handleImageLoad(i, url) }}
                     />)
                 })}
-            </div>
+            </div> */}
 
             {/* 捲り式 Viewer */}
-            {offcanvases.current.map((cvs, idx) => {
-                const i = start_1side ? idx + 1 : idx;
+            {/* {offcanvases.current.map((cvs, idx) => { */}
+            {urls.map((url, idx) => {
+                const i = start_1side ? idx + 1 : idx;  // i represents the position idx.
+                const isRight = (direction === 'rtl') === (i % 2 === 0);  // right page if shown
+                // const isShownAndLatter = currIdx === i - 1;  // the latter one of 2 pages shown
                 // which side should page i be positioned if being read
                 const side = (direction === 'rtl') === (i % 2 === 0) ? 'right' : 'left';
 
-                const zIdx = 10000 - 200 * Math.abs(i * 2 - currIdx * 2 - 1);  // this must be integer, so scale it up for transition.
+                const zIdx = 9999 - 200 * Math.abs(i * 2 - currIdx * 2 - 0);  // the former one of 2 pages shown is on top
 
                 // let z = -2*Math.abs(i*2-currPage*2-1);  // this means, e.g. page 1 and 2 has different z
                 let z = -2 * Math.abs((i <= currIdx ? 0 : 2) + currIdx - Math.ceil(i / 2) * 2);  // this means, e.g. page 1 and 2 has the same z
 
                 // pages below will shift to outside
-                let x = (i <= currIdx ? 0 : 2) + currIdx - Math.ceil(i / 2) * 2;  // this means, e.g. page 1 and 2 has the same x
-                if (x >= 2) x -= 2;
-                if (x <= -2) x += 2;
-                x *= 3;
+                let x = (i <= currIdx ? 0 : 2) + currIdx - Math.ceil(i / 2) * 2;  // this means, e.g. page 1 and 2 has the same x.
+                x /= 2; // x around shown pages will be ... -2, -2, -1, -1, 0, (0, 0,) 0, 1, 1, 2, 2, ... (0, 0,) are currently shown pages.
+                if (x >= 1) x -= 1; if (x <= -1) x += 1; // page right below shown pages shouldn't be shifted, to avoid bad look on animation
+                const shiftK = 2;
+                // dx = Math.min(abs(x) * shiftK, 5);  So integrates is shiftK*x2 or 5x
+                if (Math.abs(x) < 5 / shiftK) x = shiftK * x * x * Math.sign(x);
+                else x = 5 * x;
                 if (direction === 'ltr') x = -x;
 
                 // which side page i is now positioned
                 const pos = (i <= currIdx) === (direction === 'rtl') ? 'right' : 'left';
                 const rotY = side === pos ? 0 : (side === 'right' ? -180 : 180);
+
+                const shadowSize = (currIdx === i - 1 || currIdx === i) ? 10 : 200;
 
                 return (
                     <div
@@ -234,20 +243,19 @@ export default function MangaViewer(props: MangaViewerProps) {
                             ...(forceNoTransition ? { transitionDuration: '0s' } : {})
                         }}
                     >
+                        <img src={url} className='comic-img' style={{
+                            objectPosition: (side === 'left' ? 'right' : 'left'),
+                            filter: `drop-shadow(${isRight ? 4 : -4}px 0px 2px rgba(0, 0, 0, 0.2))`,
+                        }} />
+
+                        {/* shadow */}
                         <div
-                            className='comic-img-container'
-                            style={{ ...(side === 'left' ? { right: 0 } : { left: 0 }) }}
-                        >
-                            <canvas
-                                ref={e => setCanvasRef(e, idx)}
-                                className='comic-img'
-                            />
-                            <div
-                                className='comic-img-shadow-div'
-                                style={{
-                                    boxShadow: `inset ${side === 'left' ? '-' : ''}10px 0 10px -10px rgba(0,0,0,0.3)`
-                                }}>
-                            </div>
+                            className='comic-img-shadow-div'
+                            style={{
+                                boxShadow: `inset ${side === 'left' ? '-' : ''}${shadowSize}px 0 ${shadowSize}px -10px rgba(0,0,0,0.3)`,
+                                ...(side === 'left' ? { right: 0 } : { left: 0 }), maskMode: 'alpha', maskType: 'alpha', maskRepeat: 'no-repeat',
+                                maskImage: `url(${url})`, maskSize: '100%, 100%, contain', maskPosition: (side === 'left' ? 'right' : 'left'),
+                            }}>
                         </div>
                     </div>
                 )
