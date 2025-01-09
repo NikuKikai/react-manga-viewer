@@ -202,7 +202,6 @@ export default function MangaViewer(props: MangaViewerProps) {
             {/* {offcanvases.current.map((cvs, idx) => { */}
             {urls.map((url, idx) => {
                 const i = start_1side ? idx + 1 : idx;  // i represents the position idx.
-                const isRight = (direction === 'rtl') === (i % 2 === 0);  // right page if shown
                 // const isShownAndLatter = currIdx === i - 1;  // the latter one of 2 pages shown
                 // which side should page i be positioned if being read
                 const side = (direction === 'rtl') === (i % 2 === 0) ? 'right' : 'left';
@@ -227,13 +226,15 @@ export default function MangaViewer(props: MangaViewerProps) {
                 const rotY = side === pos ? 0 : (side === 'right' ? -180 : 180);
 
                 const shadowSize = (currIdx === i - 1 || currIdx === i) ? 10 : 200;
+                const rightPageLeft = 'round(nearest, calc(50%), 1px)'
+                const leftPageRight = `calc(${rightPageLeft} - 1px)`
 
                 return (
                     <div
                         className='comic-page'
                         key={idx}
                         style={{
-                            left: side === 'left' ? margin : '50%',
+                            ...(side === 'left' ? { right: leftPageRight } : { left: rightPageLeft }),
                             top: margin,
                             width: `calc(50% - ${margin})`,
                             height: `calc(100% - ${margin} * 2)`,
@@ -245,7 +246,7 @@ export default function MangaViewer(props: MangaViewerProps) {
                     >
                         <img src={url} className='comic-img' style={{
                             objectPosition: (side === 'left' ? 'right' : 'left'),
-                            filter: `drop-shadow(${isRight ? 4 : -4}px 0px 2px rgba(0, 0, 0, 0.2))`,
+                            filter: `drop-shadow(${side === 'right' ? 4 : -4}px 0px 2px rgba(0, 0, 0, 0.2))`,
                         }} />
 
                         {/* shadow */}
