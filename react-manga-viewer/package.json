@@ -1,11 +1,11 @@
 {
   "name": "react-manga-viewer",
-  "version": "1.2.1",
+  "version": "1.2.3",
   "main": "./dist/index.js",
-  "author": "nikukikai",
+  "author": "Niku Kikai <nikukikai@gmail.com>",
   "license": "MIT",
   "publishConfig": {
-    "access": "restricted"
+    "access": "public"
   },
   "files": [
     "src",
