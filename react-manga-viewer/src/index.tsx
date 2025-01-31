@@ -9,7 +9,7 @@ type MangaViewerProps = {
     urls: string[],
     direction?: 'ltr' | 'rtl',
     start_1side?: boolean,
-    noLoading?: boolean,
+    // noLoading?: boolean,
     divideAspect?: number,
     margin?: string,
 }
@@ -22,13 +22,13 @@ export default function MangaViewer(props: MangaViewerProps) {
         urls,
         direction = 'rtl',
         start_1side = false,
-        noLoading = false,
+        // noLoading = false,
         divideAspect = 1.41,
         margin = '10%',
     } = props;
 
     const [currIdx, setCurrIdx] = useState(0);
-    const [isLoaded, setLoaded] = useState(noLoading);
+    // const [isLoaded, setLoaded] = useState(noLoading);
     // const [npages, setNpages] = useState<number>(0);
     const npages = urls.length;
 
@@ -119,12 +119,12 @@ export default function MangaViewer(props: MangaViewerProps) {
     }
     const handleLeftOverlay = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.button !== 0) return;
-        if (!isLoaded) return;
+        // if (!isLoaded) return;
         navigate('left');
     }
     const handleRightOverlay = (e: React.MouseEvent<HTMLDivElement>) => {
         if (e.button !== 0) return;
-        if (!isLoaded) return;
+        // if (!isLoaded) return;
         navigate('right');
     }
 
@@ -170,7 +170,7 @@ export default function MangaViewer(props: MangaViewerProps) {
     }, [])
 
     useEffect(() => {
-        setLoaded(!!propsRef.current.noLoading);
+        // setLoaded(!!propsRef.current.noLoading);
         offcanvases.current = [];
     }, [urls, divideAspect]);
 
@@ -268,9 +268,9 @@ export default function MangaViewer(props: MangaViewerProps) {
             <div className='right-overlay' onMouseDown={handleRightOverlay} />
 
             {/* LOADING overlay */}
-            <div className='loading-div' style={{ display: `${isLoaded ? 'none' : 'block'}` }}>
+            {/* <div className='loading-div' style={{ display: `${isLoaded ? 'none' : 'block'}` }}>
                 <p>LOADING...</p>
-            </div>
+            </div> */}
 
 
             {/* 横スライド式 Viewer */}

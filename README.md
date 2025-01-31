@@ -5,7 +5,8 @@ A react component that creates a realistic book-like manga viewer.
 
 ## Build
 
-```
-npm run webpack
-npm pack
+```bash
+npm run webpack  # not use 'npm run build'
+npm pack  # for local
+npm publish  # publish to npm
 ```

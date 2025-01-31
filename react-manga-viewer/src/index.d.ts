@@ -6,7 +6,7 @@ export declare type MangaViewerProps = {
     urls: string[],
     direction?: 'ltr' | 'rtl',
     start_1side?: boolean,
-    noLoading?: boolean,
+    // noLoading?: boolean,
     divideAspect?: number,
     margin?: string,
 }

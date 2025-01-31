@@ -1,6 +1,6 @@
 {
   "name": "react-manga-viewer",
-  "version": "1.2.3",
+  "version": "1.2.5",
   "main": "./dist/index.js",
   "author": "Niku Kikai <nikukikai@gmail.com>",
   "license": "MIT",

@@ -8,7 +8,7 @@ Sample codes:
 // For RCA project:
 // import MangaViewer from "react-manga-viewer";
 
-// For next.js project:
+// For next.js CSR project:
 import dynamic from 'next/dynamic';
 const MangaViewer = dynamic(() => import('react-manga-viewer'), {
     ssr: false, // Disable SSR for this component
@@ -25,17 +25,12 @@ const pages = [
 
 
 export default function SamplePage() {
-    return <Suspense><SamplePageInner /></Suspense>
-}
-
-function SamplePageInner() {
     const [width, height] = useWindowSize();
 
     return <MangaViewer
         width={width} height={height}
         urls={pages}
         margin={'5%'}
-        noLoading={true}
         start_1side={false}
     />
 }
